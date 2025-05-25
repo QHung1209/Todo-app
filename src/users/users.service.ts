@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -18,7 +19,7 @@ export class UsersService {
     const existsUser = await this.userModel.findOne({
       email,
     });
-    if (existsUser) throw new BadRequestException(`email ${email} da ton tai`);
+    if (existsUser) throw new ConflictException(`Email ${email} exists`);
     const hashedPassword = this.hashPassword(password);
     return await this.userModel.create({
       email,
