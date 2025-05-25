@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 const ms = require('ms');
 import { Response } from 'express';
-import { User } from 'src/users/entities/user.schema';
 import { IUser } from 'src/users/user.interface';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 
@@ -17,7 +16,7 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
-    const user = await this.userService.findOne(email);
+    const user = await this.userService.findByEmail(email);
     if (user)
       if (this.userService.checkUserPassword(password, user.password))
         return user;
@@ -41,11 +40,7 @@ export class AuthService {
       _id: user._id,
     };
 
-    const accessToken = this.createToken(
-      payload,
-      'JWT_SECRET',
-      'EXPIRES_IN',
-    );
+    const accessToken = this.createToken(payload, 'JWT_SECRET', 'EXPIRES_IN');
     return {
       accessToken,
       user: payload,

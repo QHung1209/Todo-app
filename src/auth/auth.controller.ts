@@ -5,10 +5,10 @@ import {
   UseGuards,
   Res,
   Body,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from 'src/decorators/guard.decorator';
-import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { LocalAuthGuard } from './local-auth.guard';
@@ -16,6 +16,13 @@ import { LocalAuthGuard } from './local-auth.guard';
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Get('user-info')
+  async getUserInfo(@Request() req: any) {
+    return {
+      user: req.user,
+    };
+  }
 
   @Public()
   @UseGuards(LocalAuthGuard)

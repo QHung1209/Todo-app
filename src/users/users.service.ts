@@ -35,7 +35,13 @@ export class UsersService {
     return compareSync(password, hashPassword);
   };
 
-  async findOne(email: string) {
+  async findById(id: string) {
+    const user = await this.userModel.findById(id);
+    if (!user) throw new NotFoundException(`Not found user with id ${id}`);
+    return user;
+  }
+
+  async findByEmail(email: string) {
     const user = await this.userModel.findOne({ email });
     if (!user)
       throw new NotFoundException(`Not found user with email ${email}`);
